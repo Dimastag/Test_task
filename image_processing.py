@@ -1,4 +1,6 @@
 import numpy as np
+import yaml
+import cv2
 
 
 
@@ -19,7 +21,8 @@ class Processing:
         pass
 
     def data_parser(self):
-        pass
+        with open("data.yaml") as r:
+            pass
 
 
 if __name__ == "__main__":
