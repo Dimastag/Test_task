@@ -58,10 +58,12 @@ class Processing:
         # Применяем сдвиг ко всем точкам изображения
         translated_image = np.roll(image, shift_x, axis=1)
         translated_image = np.roll(translated_image, shift_y, axis=0)
+        # print(translated_image)
 
         # Отображаем результат
-        cv2.imshow('Translated Image', translated_image)
-        cv2.waitKey(0)
+        # cv2.imshow('Translated Image', translated_image)
+        cv2.imwrite('test_image.png', translated_image)
+        cv2.waitKey()
         cv2.destroyAllWindows()
 
     @staticmethod
@@ -73,6 +75,7 @@ class Processing:
 
 if __name__ == "__main__":
     process = Processing()
+    process.define_centre_postion()
     # process.coordinates()
     # process.standart_deviation()
     # process.dispersion()
