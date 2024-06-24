@@ -40,8 +40,8 @@ class Processing:
         image = cv2.imread('spot.png')
 
         # Нахождение контуров зеленого пятна
-        green_lower = np.array([25, 52, 72])
-        green_upper = np.array([102, 255, 255])
+        green_lower = np.array([0, 0, 0])
+        green_upper = np.array([255, 255, 255])
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv, green_lower, green_upper)
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
