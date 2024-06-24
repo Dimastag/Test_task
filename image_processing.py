@@ -1,6 +1,8 @@
 import numpy as np
 import yaml
 import cv2
+import PIL as plt
+from PIL import Image, ImageDraw
 
 
 class Processing:
@@ -36,6 +38,14 @@ class Processing:
         self.data = self.data_parser()
         return self.data.get("dispersion")
 
+    def statistics(self, data_input):
+        st_dev = data_input
+        st_dev_out = np.std(st_dev)
+        disp = np.var(data_input)
+        disp_out = np.average(disp)
+        return [round(st_dev_out), round(disp_out)]
+
+
     def define_centre_position(self):
         image = cv2.imread('spot.png')
 
@@ -63,6 +73,12 @@ class Processing:
         # Отображаем результат
         # cv2.imshow('Translated Image', translated_image)
         cv2.imwrite('test_image.png', translated_image)
+        # plt.imshow('test_image.png')
+        # plt.show()
+        img = Image.open("test_image.png")
+        draw = ImageDraw.Draw(img)
+        draw.point((center_x , center_y ), fill='red')  # Рисуем красную точку по координатам 100x100
+        img.show()
         cv2.waitKey()
         cv2.destroyAllWindows()
 
@@ -75,7 +91,8 @@ class Processing:
 
 if __name__ == "__main__":
     process = Processing()
-    process.define_centre_position()
+
+    # process.define_centre_position()
     # process.coordinates()
     # process.standart_deviation()
     # process.dispersion()
