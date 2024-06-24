@@ -36,7 +36,7 @@ class Processing:
         self.data = self.data_parser()
         return self.data.get("dispersion")
 
-    def define_centre_postion(self):
+    def define_centre_position(self):
         image = cv2.imread('spot.png')
 
         # Нахождение контуров зеленого пятна
@@ -75,7 +75,7 @@ class Processing:
 
 if __name__ == "__main__":
     process = Processing()
-    process.define_centre_postion()
+    process.define_centre_position()
     # process.coordinates()
     # process.standart_deviation()
     # process.dispersion()
