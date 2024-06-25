@@ -5,7 +5,7 @@ import math
 from image_processing import Processing
 
 
-def test_variance():
+def test_dispersion():
 
     processing = Processing()
 
@@ -13,5 +13,5 @@ def test_variance():
     dispersion_value = processing.disp
 
 
-    assert not math.isclose(std_value ** 2, dispersion_value)
+    assert dispersion_value == std_value ** 2
 
