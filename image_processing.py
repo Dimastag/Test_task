@@ -100,13 +100,42 @@ class Processing:
         return sample_json
 
 
-class Handler:
+class Handler(Processing):
 
-    def __init__(self):
-        pass
+    def __init__(self, img):
+        self.image = img
 
-    def find_coordinates(self):
-        pass
+    def set_coordinates_x(self):
+        # image = cv2.imread('spot.png') # Тут не получилось наследовать функционал и класса Proccess
+        image = cv2.imread(self.image)
+
+        shift_x = image.shape[1] // 2 - self.define_real_centre_x()  # Сдвиг координат к нулю на рисунке
+
+        return shift_x
+
+    def set_coordinates_y(self):
+        # image = cv2.imread('spot.png')  # Тоже самое
+        image = cv2.imread(self.image)
+
+        shift_y = image.shape[0] // 2 - self.define_real_centre_y()
+
+        return shift_y
+
+    def translated_image(self):
+        image = cv2.imread(self.image)
+        x = self.set_coordinates_x()
+        y = self.set_coordinates_y()
+        translated_image = np.roll(image, x, axis=1)
+        translated_image = np.roll(translated_image, y, axis=0)
+
+        cv2.imwrite('test_image.png', translated_image)
+        img = Image.open("test_image.png")
+        draw = ImageDraw.Draw(img)
+        draw.point((self.define_real_centre_x(), self.define_real_centre_y()),
+                   fill='red')  # Рисуем красную точку по координатам 10x10
+        img.show()
+        cv2.waitKey()
+        cv2.destroyAllWindows()
 
     def find_dispersion(self):
         pass
@@ -121,43 +150,9 @@ class Handler:
         disp_out = np.average(disp)
         return [round(st_dev_out), round(disp_out)]
 
-    # def define_centre_position(self):
-    #     image = cv2.imread('spot.png')
-    #     green_lower = np.array([0, 0, 0])  # Нахождение контуров зеленого пятна
-    #     green_upper = np.array([255, 255, 255])
-    #     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    #     mask = cv2.inRange(hsv, green_lower, green_upper)
-    #     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    #
-    #     # Находим координаты центра контура (центр пятна)
-    #     m = cv2.moments(contours[0])
-    #     center_x = int(m["m10"] / m["m00"])
-    #     center_y = int(m["m01"] / m["m00"])
-    #
-    #     # Вычисляем сдвиг
-    #     shift_x = image.shape[1] // 2 - center_x
-    #     shift_y = image.shape[0] // 2 - center_y
-    #
-    #     # Применяем сдвиг ко всем точкам изображения
-    #     translated_image = np.roll(image, shift_x, axis=1)
-    #     translated_image = np.roll(translated_image, shift_y, axis=0)
-    #     # print(translated_image)
-    #
-    #     # Отображаем результат
-    #     # cv2.imshow('Translated Image', translated_image)
-    #     cv2.imwrite('test_image.png', translated_image)
-    #     # plt.imshow('test_image.png')
-    #     # plt.show()
-    #     img = Image.open("test_image.png")
-    #     draw = ImageDraw.Draw(img)
-    #     draw.point((center_x, center_y), fill='red')  # Рисуем красную точку по координатам 100x100
-    #     img.show()
-    #     cv2.waitKey()
-    #     cv2.destroyAllWindows()
-
 
 if __name__ == "__main__":
-    process = Processing('spot.png')
+    # process = Processing('spot.png')
 
     # process.define_centre_position()
     # process.coordinates()
@@ -168,4 +163,5 @@ if __name__ == "__main__":
     # process.define_real_centre_x()
     # process.define_real_centre_y()
 
-    # handler = Handler()
+    handler = Handler('spot.png')
+    handler.translated_image()
