@@ -6,7 +6,7 @@ from image_processing import Processing
 
 @pytest.fixture
 def processing():
-    return Processing()
+    return Processing("spot.png")
 
 
 @pytest.fixture
