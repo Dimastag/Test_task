@@ -89,12 +89,13 @@ class Processing:
         return templates
 
 
+
 if __name__ == "__main__":
     process = Processing()
 
     # process.define_centre_position()
     # process.coordinates()
-    # process.standart_deviation()
+    #process.standart_deviation()
     # process.dispersion()
     # process.position_x()
     # process.position_y()
