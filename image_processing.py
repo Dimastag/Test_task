@@ -12,6 +12,8 @@ class Processing:
         self.disp = self.dispersion()
         self.x = self.position_x()
         self.y = self.position_y()
+        self.real_x = self.define_real_centre_x()
+        self.real_y = self.define_real_centre_y()
 
     def coordinates(self):
         self.data = self.data_parser()
@@ -38,6 +40,59 @@ class Processing:
         self.data = self.data_parser()
         return self.data.get("dispersion")
 
+    @staticmethod
+    def define_real_centre_x():
+        image = cv2.imread('spot.png')
+        green_lower = np.array([0, 0, 0])  # Нахождение контуров зеленого пятна
+        green_upper = np.array([255, 255, 255])
+        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(hsv, green_lower, green_upper)
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Находим координаты центра контура (центр пятна)
+        m = cv2.moments(contours[0])
+        center_x = int(m["m10"] / m["m00"])
+
+        return center_x
+
+    @staticmethod
+    def define_real_centre_y():
+
+        image = cv2.imread('spot.png')
+        green_lower = np.array([0, 0, 0])  # Нахождение контуров зеленого пятна
+        green_upper = np.array([255, 255, 255])
+        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(hsv, green_lower, green_upper)
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Находим координаты центра контура (центр пятна)
+        m = cv2.moments(contours[0])
+
+        center_y = int(m["m01"] / m["m00"])
+
+        return center_y
+
+    @staticmethod
+    def data_parser():
+        with open("data.yaml") as r:
+            sample_json = yaml.safe_load(r)
+        return sample_json
+
+
+class Handler:
+
+    def __init__(self):
+        pass
+
+    def find_coordinates(self):
+        pass
+
+    def find_dispersion(self):
+        pass
+
+    def find_std(self):
+        pass
+
     def statistics(self, data_input):
         st_dev = data_input
         st_dev_out = np.std(st_dev)
@@ -47,8 +102,7 @@ class Processing:
 
     def define_centre_position(self):
         image = cv2.imread('spot.png')
-        # Нахождение контуров зеленого пятна
-        green_lower = np.array([0, 0, 0])
+        green_lower = np.array([0, 0, 0])  # Нахождение контуров зеленого пятна
         green_upper = np.array([255, 255, 255])
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv, green_lower, green_upper)
@@ -80,12 +134,6 @@ class Processing:
         cv2.waitKey()
         cv2.destroyAllWindows()
 
-    @staticmethod
-    def data_parser():
-        with open("data.yaml") as r:
-            sample_json = yaml.safe_load(r)
-        return sample_json
-
 
 if __name__ == "__main__":
     process = Processing()
@@ -96,3 +144,6 @@ if __name__ == "__main__":
     # process.dispersion()
     # process.position_x()
     # process.position_y()
+    process.define_real_centre()
+
+    # handler = Handler()
