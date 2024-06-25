@@ -45,10 +45,8 @@ class Processing:
         disp_out = np.average(disp)
         return [round(st_dev_out), round(disp_out)]
 
-
     def define_centre_position(self):
         image = cv2.imread('spot.png')
-
         # Нахождение контуров зеленого пятна
         green_lower = np.array([0, 0, 0])
         green_upper = np.array([255, 255, 255])
@@ -77,7 +75,7 @@ class Processing:
         # plt.show()
         img = Image.open("test_image.png")
         draw = ImageDraw.Draw(img)
-        draw.point((center_x , center_y ), fill='red')  # Рисуем красную точку по координатам 100x100
+        draw.point((center_x, center_y), fill='red')  # Рисуем красную точку по координатам 100x100
         img.show()
         cv2.waitKey()
         cv2.destroyAllWindows()
@@ -85,9 +83,8 @@ class Processing:
     @staticmethod
     def data_parser():
         with open("data.yaml") as r:
-            templates = yaml.safe_load(r)
-        return templates
-
+            sample_json = yaml.safe_load(r)
+        return sample_json
 
 
 if __name__ == "__main__":
@@ -95,7 +92,7 @@ if __name__ == "__main__":
 
     # process.define_centre_position()
     # process.coordinates()
-    #process.standart_deviation()
+    # process.standart_deviation()
     # process.dispersion()
     # process.position_x()
     # process.position_y()
