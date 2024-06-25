@@ -10,7 +10,7 @@ def test_variance():
     processing = Processing()
 
     std_value = processing.std
-    dispersion_value = processing.dispersion
+    dispersion_value = processing.disp
 
 
     assert not math.isclose(std_value ** 2, dispersion_value)

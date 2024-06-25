@@ -9,7 +9,7 @@ class Processing:
 
     def __init__(self):
         self.std = self.standart_deviation()
-        self.dispersion = self.dispersion()
+        self.disp = self.dispersion()
         self.x = self.position_x()
         self.y = self.position_y()
 
