@@ -155,8 +155,6 @@ class Handler(Processing):
 
         data = list(set(x))
 
-        mean = np.mean(data)
-
         std = np.std(data)
 
         dispersion = np.var(data)
@@ -176,12 +174,13 @@ class Handler(Processing):
 
         data = list(set(y))
 
-        mean = np.mean(data)
-
         std = np.std(data)
 
         dispersion = np.var(data)
         return [round(std), round(dispersion)]
+
+    def put_statistic_to_json(self):
+        pass
 
 
 if __name__ == "__main__":
