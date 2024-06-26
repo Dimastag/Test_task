@@ -1,5 +1,5 @@
 import random
-
+import json
 import numpy as np
 import yaml
 import cv2
@@ -7,6 +7,10 @@ from PIL import Image, ImageDraw
 
 
 class Processing:
+    """
+    Класс для работы с входными данными из файла yaml, а так же как база для последующего класса обработки изображения
+
+    """
 
     def __init__(self, img):
         self.image = img
@@ -102,6 +106,11 @@ class Processing:
 
 
 class Handler(Processing):
+    """
+        Класс для работы с сырыми данными, привёднными в центр изображения координатами для последующего
+        расчета среднеквадратичного отклонения и дисперсии
+
+    """
 
     def __init__(self, img):
         self.image = img
@@ -124,7 +133,7 @@ class Handler(Processing):
 
     def translated_image(self):
 
-        """ Метод обозначающий точку начала координат 0, 0 как середина картинки """
+        """ Метод обозначающий точку начала координат 0, 0 как середина картинки c визуализацией этой точки """
 
         image = cv2.imread(self.image)
         x = self.set_coordinates_x()
@@ -143,7 +152,11 @@ class Handler(Processing):
 
     def count_statistics_x(self):
 
-        """ Метод подсчёта стандартного отклонения и дисперсии по случано выбранным координатам оси x """
+        """
+            Метод подсчёта стандартного отклонения и дисперсии по случайно выбранным координатам оси X,
+         в методе реализован рандомный набор случайных координат по оси X для имитации случайной выборки
+
+        """
 
         x = []
         min_value = self.set_coordinates_x()
@@ -158,11 +171,15 @@ class Handler(Processing):
         std = np.std(data)
 
         dispersion = np.var(data)
-        return [round(std), round(dispersion)]
+        return [round(std), round(dispersion), data]
 
     def count_statistics_y(self):
 
-        """ Метод подсчёта стандартного отклонения и дисперсии по случано выбранным координатам оси y """
+        """
+            Метод подсчёта стандартного отклонения и дисперсии по случайно выбранным координатам оси Y,
+         в методе реализован рандомный набор случайных координат по оси Y для имитации случайной выборки
+
+        """
 
         y = []
         min_value = self.set_coordinates_x()
@@ -177,10 +194,31 @@ class Handler(Processing):
         std = np.std(data)
 
         dispersion = np.var(data)
-        return [round(std), round(dispersion)]
+        return [round(std), round(dispersion), data]
 
-    def put_statistic_to_json(self):
-        pass
+    def publish_statistic_to_json(self):
+
+        """Метод для отправки статистики по расчёту отклонения и дисперсии в json"""
+
+        data_x = self.count_statistics_x()
+        data_y = self.count_statistics_y()
+
+        statistic_for_x_y = {
+        "x" : {
+            "std": data_x[0],
+            "dispersion": data_x[1],
+            "position": data_x[2]
+        },
+
+        "y" : {
+             "std": data_y[0],
+             "dispersion": data_y[1],
+             "position": data_y[2]
+        }
+        }
+
+        with open('statistics.json', 'w') as file:
+            json.dump(statistic_for_x_y, file,  indent=4)
 
 
 if __name__ == "__main__":
@@ -197,5 +235,6 @@ if __name__ == "__main__":
 
     handler = Handler('spot.png')
     # handler.translated_image()
-    handler.count_statistics_x()
-    handler.count_statistics_y()
+    # handler.count_statistics_x()
+    # handler.count_statistics_y()
+    handler.publish_statistic_to_json()
