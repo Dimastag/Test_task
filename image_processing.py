@@ -1,7 +1,8 @@
+import random
+
 import numpy as np
 import yaml
 import cv2
-import PIL as plt
 from PIL import Image, ImageDraw
 
 
@@ -106,7 +107,7 @@ class Handler(Processing):
         self.image = img
 
     def set_coordinates_x(self):
-        # image = cv2.imread('spot.png') # Тут не получилось наследовать функционал и класса Proccess
+
         image = cv2.imread(self.image)
 
         shift_x = image.shape[1] // 2 - self.define_real_centre_x()  # Сдвиг координат к нулю на рисунке
@@ -114,7 +115,7 @@ class Handler(Processing):
         return shift_x
 
     def set_coordinates_y(self):
-        # image = cv2.imread('spot.png')  # Тоже самое
+
         image = cv2.imread(self.image)
 
         shift_y = image.shape[0] // 2 - self.define_real_centre_y()
@@ -140,23 +141,47 @@ class Handler(Processing):
         cv2.waitKey()
         cv2.destroyAllWindows()
 
-    def find_dispersion_x(self):
-        pass
-    def find_dispersion_y(self):
-        pass
+    def count_statistics_x(self):
 
-    def find_std_x(self):
-        pass
+        """ Метод подсчёта стандартного отклонения и дисперсии по случано выбранным координатам оси x """
 
-    def find_std_y(self):
-        pass
+        x = []
+        min_value = self.set_coordinates_x()
+        step = 0
+        while step < 25:
+            temp = random.randint(min_value, step)
+            x.append(temp)
+            step += 1
 
-    def statistics(self, data_input):
-        st_dev = data_input
-        st_dev_out = np.std(st_dev)
-        disp = np.var(data_input)
-        disp_out = np.average(disp)
-        return [round(st_dev_out), round(disp_out)]
+        data = list(set(x))
+
+        mean = np.mean(data)
+
+        std = np.std(data)
+
+        dispersion = np.var(data)
+        return [round(std), round(dispersion)]
+
+    def count_statistics_y(self):
+
+        """ Метод подсчёта стандартного отклонения и дисперсии по случано выбранным координатам оси y """
+
+        y = []
+        min_value = self.set_coordinates_x()
+        step = 0
+        while step < 25:
+            temp = random.randint(min_value, step)
+            y.append(temp)
+            step += 1
+
+        data = list(set(y))
+
+        mean = np.mean(data)
+
+        std = np.std(data)
+
+        dispersion = np.var(data)
+        return [round(std), round(dispersion)]
 
 
 if __name__ == "__main__":
@@ -172,4 +197,6 @@ if __name__ == "__main__":
     # process.define_real_centre_y()
 
     handler = Handler('spot.png')
-    handler.translated_image()
+    # handler.translated_image()
+    handler.count_statistics_x()
+    handler.count_statistics_y()
