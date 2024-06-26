@@ -204,21 +204,21 @@ class Handler(Processing):
         data_y = self.count_statistics_y()
 
         statistic_for_x_y = {
-        "x" : {
-            "std": data_x[0],
-            "dispersion": data_x[1],
-            "position": data_x[2]
-        },
+            "x": {
+                "std": data_x[0],
+                "dispersion": data_x[1],
+                "position": data_x[2]
+            },
 
-        "y" : {
-             "std": data_y[0],
-             "dispersion": data_y[1],
-             "position": data_y[2]
-        }
+            "y": {
+                "std": data_y[0],
+                "dispersion": data_y[1],
+                "position": data_y[2]
+            }
         }
 
         with open('statistics.json', 'w') as file:
-            json.dump(statistic_for_x_y, file,  indent=4)
+            json.dump(statistic_for_x_y, file, indent=4)
 
 
 if __name__ == "__main__":
