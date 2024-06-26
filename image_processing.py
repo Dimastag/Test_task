@@ -122,6 +122,9 @@ class Handler(Processing):
         return shift_y
 
     def translated_image(self):
+
+        """ Метод обозначающий точку начала координат 0, 0 как середина картинки """
+
         image = cv2.imread(self.image)
         x = self.set_coordinates_x()
         y = self.set_coordinates_y()
@@ -137,10 +140,15 @@ class Handler(Processing):
         cv2.waitKey()
         cv2.destroyAllWindows()
 
-    def find_dispersion(self):
+    def find_dispersion_x(self):
+        pass
+    def find_dispersion_y(self):
         pass
 
-    def find_std(self):
+    def find_std_x(self):
+        pass
+
+    def find_std_y(self):
         pass
 
     def statistics(self, data_input):
